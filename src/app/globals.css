@@ -3,13 +3,35 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent: #6366f1; /* indigo-500 */
+  --accent-2: #22d3ee; /* cyan-400 */
 }
 
-@theme inline {
+/* Dynamic palette switching */
+[data-palette="indigo"] {
+  --accent: #6366f1;
+  --accent-2: #22d3ee;
+}
+[data-palette="cyan"] {
+  --accent: #06b6d4; /* cyan-500 */
+  --accent-2: #60a5fa; /* blue-400 */
+}
+[data-palette="violet"] {
+  --accent: #8b5cf6; /* violet-500 */
+  --accent-2: #22d3ee; /* cyan-400 */
+}
+[data-palette="rose"] {
+  --accent: #f43f5e; /* rose-500 */
+  --accent-2: #fb7185; /* rose-400 */
+}
+[data-palette="amber"] {
+  --accent: #f59e0b; /* amber-500 */
+  --accent-2: #34d399; /* emerald-400 */
+}
+
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +44,74 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-kr), Arial, Helvetica, sans-serif;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Button/link hover micro-interactions */
+a, button {
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+a:hover, button:hover {
+  transform: translateY(-1px);
+}
+
+/* Explicit theme override via data-theme attribute */
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #171717;
+  --accent: #6366f1;
+  --accent-2: #22d3ee;
+}
+
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --accent: #818cf8; /* indigo-400 */
+  --accent-2: #67e8f9; /* cyan-300 */
+}
+
+/* Ambient gradient background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20% -10% auto -10%;
+  height: 60vh;
+  pointer-events: none;
+  background: radial-gradient(1200px 400px at 20% 10%, color-mix(in oklab, var(--accent) 40%, transparent) 0%, transparent 60%),
+              radial-gradient(800px 300px at 80% 0%, color-mix(in oklab, var(--accent-2) 40%, transparent) 0%, transparent 60%);
+  filter: blur(30px);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+/* Section spacing utility */
+.section {
+  width: 100%;
+  max-width: 64rem; /* 1024px */
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}
+/* Image loading skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--background) 0%,
+    color-mix(in oklab, var(--foreground) 5%, transparent) 50%,
+    var(--background) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
